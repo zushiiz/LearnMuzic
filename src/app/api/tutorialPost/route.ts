@@ -1,6 +1,5 @@
 import {NextResponse} from "next/server";
 import { MusicDb } from "../../../app/lib/db";
-import { Instrument } from "../../../app/lib/dbTypes";
 
 export async function GET(){
   try {
