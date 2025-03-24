@@ -3,19 +3,14 @@ import { MusicDb } from "../../../app/lib/db";
 import { errors } from "../../../app/lib/Errors";
 import { User } from "../../../app/lib/dbTypes";
 import { hashPassword } from "../../../app/lib/hash";
-import { send } from "process";
-
-const salt = 10;
 
 export async function POST(request : NextRequest){
   try {
     const musicDb = new MusicDb();
     await musicDb.connect(); 
     const newUserInfo = await request.json();
-
-    console.log(newUserInfo);
     const hashedPassword = await hashPassword(newUserInfo.hashedPassword);
-    const creationDate = newUserInfo.date.split("T");
+    const creationDate = newUserInfo.date.split("T"); // Might not need!!
 
     const sendNewUser : User = {
       id : 0,
@@ -24,11 +19,8 @@ export async function POST(request : NextRequest){
       mail : newUserInfo.mail,
       creationDate : creationDate[0]
     }
-    console.log(sendNewUser);
 
     await musicDb.newRegisteredUser(sendNewUser);
-
-    console.log("after await newRegister");
 
     return NextResponse.json({message : "Successfully registered!"}, {status : 201});
       

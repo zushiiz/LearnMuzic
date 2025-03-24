@@ -3,39 +3,39 @@ import RegisterField from "./registerFields";
 import Button from "../button";
 import { errors } from "../../lib/Errors";
 
-function getRegisterInputs(){
+function getLoginInputs(){
   const nameInput = document.getElementById("usernameField") as HTMLInputElement;
   const passwordInput = document.getElementById("passwordField") as HTMLInputElement;
-  const mailInput = document.getElementById("mailField") as HTMLInputElement; 
+
   if (!nameInput || !passwordInput){
     throw new Error(errors.input_nan);
   }
-  const newUser  = {
+  const userLogin  = {
     username : nameInput.value,
-    hashedPassword : passwordInput.value,
-    mail : mailInput.value,
-    date : new Date()
+    password : passwordInput.value,
   }
-  
-  fetch("/api/register", 
+
+  console.log(userLogin);
+
+  fetch("/api/login", 
   {method : "POST", 
   headers : {
     "Accept" : "application/json",
     "Content-Type" : "application/json"
   },
-  body : JSON.stringify(newUser)
+  body : JSON.stringify(userLogin)
   }).then((value : Response) => {value.status});
+
 
 }
 
-export default function Register(){
+export default function loginInputs(){
   return (
     <article>
       <RegisterField idName="usernameField"/>
       <RegisterField idName="passwordField"/>
-      <RegisterField idName="mailField"/>
       
-      <Button buttonFunc={getRegisterInputs} buttonText={"Register"}/>
+      <Button buttonFunc={getLoginInputs} buttonText={"Login"}/>
     </article>
   );
 }

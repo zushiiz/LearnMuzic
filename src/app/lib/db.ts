@@ -154,7 +154,7 @@ export class MusicDb extends Db{
   }
 
   // User
-  public async getUserInformation(id : number): Promise<User[]>{
+  public async getUserInformationById(id : number): Promise<User[]>{
     try {
       if (!this.dbConnection) {
         throw new Error(errors.not_connected);
@@ -163,16 +163,64 @@ export class MusicDb extends Db{
       (`
       SELECT *
       FROM user
-      WHERE userId = ${id};
-      `);
+      WHERE userId = ?;
+      `, [id]);
 
       return rows.map((row : any) => ({
         id : row.userId,
         username : row.username,
         hashedPassword : row.password,
-        mail : row.mail,
+        mail : row.email,
         creationDate : row.creationDate
       }));
+    } catch (err) {
+      throw new Error(errors.result_empty);
+    }
+  }
+
+  public async getUserInformationByName(username : string): Promise<User[]>{
+    try {
+      if (!this.dbConnection) {
+        throw new Error(errors.not_connected);
+      }
+
+      console.log(username);
+      const [rows] = await this.dbConnection.execute<mysql.RowDataPacket[]>
+      (`
+      SELECT *
+      FROM user
+      WHERE username = ?;
+      `, [username]);
+
+      return rows.map((row : any) => ({
+        id : row.userId,
+        username : row.username,
+        hashedPassword : row.password,
+        mail : row.email,
+        creationDate : row.creationDate
+      }));
+    } catch (err) {
+      throw new Error(errors.result_empty);
+    }
+  }
+
+  public async getUserPasswordByName(username : string): Promise<string>{
+    try {
+      if (!this.dbConnection) {
+        throw new Error(errors.not_connected);
+      }
+      const [rows] = await this.dbConnection.execute<mysql.RowDataPacket[]>
+      (`
+      SELECT password
+      FROM user
+      WHERE username = ?;
+      `, [username]);
+
+      if (rows.length > 0){
+        return rows[0].password;        
+      } else{
+        throw new Error(errors.result_empty);
+      }
     } catch (err) {
       throw new Error(errors.result_empty);
     }
@@ -204,24 +252,14 @@ export class MusicDb extends Db{
       if (!this.dbConnection){
         throw new Error(errors.not_connected);
       }
-      console.log("registerUser");
-      console.log(userInfo);
 
-      try {
-        await this.dbConnection.execute
-        (`
-        INSERT INTO user (username, password, email, creationDate)
-        VALUES (?, ?, ?, ?);
-        `, [userInfo.username, userInfo.hashedPassword, userInfo.mail, userInfo.creationDate]);
+      await this.dbConnection.execute
+      (`
+      INSERT INTO user (username, password, email, creationDate)
+      VALUES (?, ?, ?, ?);
+      `, [userInfo.username, userInfo.hashedPassword, userInfo.mail, userInfo.creationDate]);
 
-      } catch (err){
-        console.log(err);
-      }
-
-
-
-      console.log("a");
-      return (201); // FIX THIS
+      return (201);
     }catch (err) {
     throw new Error(errors.input_nan);
     }
