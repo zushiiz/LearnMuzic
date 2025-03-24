@@ -7,23 +7,34 @@ function getRegisterInputs(){
   console.log("click");
   const nameInput = document.getElementById("usernameField") as HTMLInputElement;
   const passwordInput = document.getElementById("passwordField") as HTMLInputElement;
+  const mailInput = document.getElementById("mailField") as HTMLInputElement; 
   if (!nameInput || !passwordInput){
     throw new Error(errors.input_nan);
   }
-  const newUser = {
+  const newUser  = {
     username : nameInput.value,
-    password : passwordInput.value
+    hashedPassword : passwordInput.value,
+    mail : mailInput.value,
+    date : new Date()
   }
-  console.log(newUser);
+  
+  fetch("/api/register", 
+  {method : "POST", 
+  headers : {
+    "Accept" : "application/json",
+    "Content-Type" : "application/json"
+  },
+  body : JSON.stringify(newUser)
+  }).then((value : Response) => {value.status});
 
 }
-
 
 export default function Register(){
   return (
     <article>
       <RegisterField idName="usernameField"/>
       <RegisterField idName="passwordField"/>
+      <RegisterField idName="mailField"/>
       
       <Button buttonFunc={getRegisterInputs}/>
     </article>

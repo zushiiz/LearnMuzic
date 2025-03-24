@@ -51,7 +51,7 @@ export class MusicDb extends Db{
       `);
 
       if (!rows || rows.length === 0) {
-        throw new Error(errors.result_empty);
+        return null;
       }
 
       return rows[0] as T;
@@ -81,13 +81,17 @@ export class MusicDb extends Db{
         rows.map(async (row : any) => {
           const instrument = await this.getEntityById<Instrument>("instrument", row.instrumentId);
           const difficulty = await this.getEntityById<Difficulty>("difficulty", row.difficultyId);
+          if (!instrument){
+            throw new Error(errors.result_empty);
+          }
           return {
             id : row.tutorialId,
             videoEmbed : row.embedVideoLink,
             author : row.videoAuthor,
-            instrument : instrument?.instrument, 
-            difficulty : difficulty?.difficulty
+            instrument : instrument.instrument, 
+            difficulty : difficulty != null ? difficulty.difficulty : null
           }
+
         })
       );
       return tutorials;
@@ -194,5 +198,33 @@ export class MusicDb extends Db{
       return false;  
     }
   }
+
+  public async newRegisteredUser(userInfo : User): Promise<number>{
+    try {
+      if (!this.dbConnection){
+        throw new Error(errors.not_connected);
+      }
+      console.log("registerUser");
+      console.log(userInfo);
+
+      try {
+        await this.dbConnection.execute
+        (`
+        INSERT INTO user (username, password, email, creationDate)
+        VALUES (?, ?, ?, ?);
+        `, [userInfo.username, userInfo.hashedPassword, userInfo.mail, userInfo.creationDate]);
+
+      } catch (err){
+        console.log(err);
+      }
+
+
+
+      console.log("a");
+      return (201); // FIX THIS
+    }catch (err) {
+    throw new Error(errors.input_nan);
+    }
+  } 
 
 }

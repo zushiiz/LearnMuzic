@@ -9,19 +9,24 @@ export interface Tutorial {
   videoEmbed : string,
   author : string,
   instrument : string,
-  difficulty : string
+  difficulty : string | null
 }
 
 export interface BaseEntity {
   id : number,
-  name : string
 }
 
-export interface Instrument extends BaseEntity {}
+export interface Instrument extends BaseEntity {
+  instrument : string
+}
 
-export interface Difficulty extends BaseEntity {}
+export interface Difficulty extends BaseEntity {
+  difficulty : string
+}
 
-export interface Genre extends BaseEntity {}
+export interface Genre extends BaseEntity {
+  genre : string
+}
 
 export interface Song {
   id : number,
