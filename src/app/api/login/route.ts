@@ -12,7 +12,6 @@ export async function POST(request : NextRequest){
     const success = await comparePassword(loginInfo.password, storedPass);
     if (success) {
       const userId = await musicDb.getUserInformationByName(loginInfo.username);
-      console.log(userId[0].id);
 
       const res = NextResponse.json({message : "Login successful!"}, {status : 201});
 
@@ -29,7 +28,6 @@ export async function POST(request : NextRequest){
       return NextResponse.json({message : "Wrong password or username"}, {status : 400})
     }
     } catch (err){
-      console.log(err);
       return NextResponse.json({error : errors.result_empty}, {status : 500});
     }
 

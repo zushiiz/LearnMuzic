@@ -2,6 +2,7 @@
 
 import {useEffect, useState} from "react";
 import { TutorialPost } from "../lib/dbTypes";
+import Logout from "./userManagement/logout";
 
 export default function Post(){
 
@@ -35,6 +36,8 @@ export default function Post(){
             Song ID: {post.songId}, Tutorial ID: {post.tutorialId}
           </li>
         ))}
+
+        <Logout/>
       </ul>
     </div>
   );

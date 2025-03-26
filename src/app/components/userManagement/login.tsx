@@ -24,7 +24,10 @@ function getLoginInputs(){
     "Content-Type" : "application/json"
   },
   body : JSON.stringify(userLogin)
-  }).then((value : Response) => {value.status});
+  })
+  .then(
+    (value : Response) => {value.status}
+  );
 
 }
 
