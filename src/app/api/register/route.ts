@@ -10,7 +10,7 @@ export async function POST(request : NextRequest){
     await musicDb.connect(); 
     const newUserInfo = await request.json();
     const hashedPassword = await hashPassword(newUserInfo.hashedPassword);
-    const creationDate = newUserInfo.date.split("T"); // Might not need!!
+    const creationDate = newUserInfo.date.split("T"); // Needed
 
     const sendNewUser : User = {
       id : 0,

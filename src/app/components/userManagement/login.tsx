@@ -26,7 +26,6 @@ function getLoginInputs(){
   body : JSON.stringify(userLogin)
   }).then((value : Response) => {value.status});
 
-
 }
 
 export default function loginInputs(){
