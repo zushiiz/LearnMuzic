@@ -24,7 +24,8 @@ function getRegisterInputs(){
     "Content-Type" : "application/json"
   },
   body : JSON.stringify(newUser)
-  }).then((value : Response) => {value.status});
+  })
+  .then((value : Response) => {value.status}); // remove
 
 }
 

@@ -2,7 +2,7 @@
 import Button from "../button";
 
 function userLogout(){
-  fetch("/api/logout");
+  fetch("/api/logout", {method : "POST"});
   window.location.reload();
   console.log("user sucessfully logged out!");
 }

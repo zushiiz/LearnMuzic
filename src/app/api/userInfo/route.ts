@@ -24,7 +24,7 @@ export async function GET(req : NextRequest){
 
     console.log("fetching", userInformation[0]);
 
-    return NextResponse.json(userInformation[0]);
+    return NextResponse.json(userInformation[0], {status : 200});
     
 
   } catch (error) {
