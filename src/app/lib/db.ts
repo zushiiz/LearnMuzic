@@ -71,8 +71,8 @@ export class MusicDb extends Db{
       (`
       SELECT * 
       FROM tutorial 
-      WHERE tutorialId = ${id};
-      `);
+      WHERE tutorialId = ?;
+      `, [id]);
       if (!rows || rows.length === 0) {
         throw new Error(errors.result_empty)
       }
@@ -147,10 +147,8 @@ export class MusicDb extends Db{
         tutorialId : row.tutorialId,
       }));
     } catch (err) {
-      // Handle any errors that occur during the query
       throw new Error(errors.result_empty);
     }
-
   }
 
   // User
@@ -235,19 +233,19 @@ export class MusicDb extends Db{
       (`
         SELECT *
         FROM verifiedArtist
-        WHERE artistId = ${userId};
-      `)
+        WHERE artistId = ?;
+      `, [userId])
       return rows.map((row : any) => ({
         id : row.artistId,
         name : row.artistName
       }));
     } catch (err) {
       console.log("User is not verified artist");
-      return false;  
+      return false;
     }
   }
 
-  public async newRegisteredUser(userInfo : User): Promise<number>{
+  public async newRegisteredUser(userInfo : User){ // check again for return type
     try {
       if (!this.dbConnection){
         throw new Error(errors.not_connected);
@@ -259,7 +257,6 @@ export class MusicDb extends Db{
       VALUES (?, ?, ?, ?);
       `, [userInfo.username, userInfo.hashedPassword, userInfo.mail, userInfo.creationDate]);
 
-      return (201);
     }catch (err) {
     throw new Error(errors.input_nan);
     }

@@ -1,12 +1,12 @@
 import {NextRequest, NextResponse} from "next/server";
 import { musicDb } from "../../../app/lib/db";
-import { errors } from "../../../app/lib/Errors";
 import { User } from "../../../app/lib/dbTypes";
 import { hashPassword } from "../../../app/lib/hash";
+import { httpErrors } from "../../lib/httpErrors";
 
-export async function POST(request : NextRequest){
+export async function POST(req : NextRequest){
   try {
-    const newUserInfo = await request.json();
+    const newUserInfo = await req.json();
     const hashedPassword = await hashPassword(newUserInfo.hashedPassword);
     const creationDate = newUserInfo.date.split("T");
 
@@ -20,10 +20,9 @@ export async function POST(request : NextRequest){
 
     await musicDb.newRegisteredUser(sendNewUser);
 
-    return NextResponse.json({message : "Successfully registered!"}, {status : 201});
+    return NextResponse.json({message : "Successfully registered"}, {status : 201});
       
     } catch (err){
-      return NextResponse.json({error : errors.result_empty}, {status : 500});
+      return httpErrors.internalServerError;
     }
-
 }

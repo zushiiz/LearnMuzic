@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { httpErrors } from "../../../app/lib/httpErrors";
 
 export async function POST(){
   try {
@@ -6,7 +7,6 @@ export async function POST(){
     res.cookies.delete("userId");
     return res;    
   } catch (err){
-    console.log(err);
+    return httpErrors.badRequest;
   }
-
 }
