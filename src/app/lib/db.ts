@@ -266,3 +266,8 @@ export class MusicDb extends Db{
   } 
 
 }
+
+
+export const musicDb = new MusicDb();
+
+musicDb.connect();

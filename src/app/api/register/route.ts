@@ -1,13 +1,11 @@
 import {NextRequest, NextResponse} from "next/server";
-import { MusicDb } from "../../../app/lib/db";
+import { musicDb } from "../../../app/lib/db";
 import { errors } from "../../../app/lib/Errors";
 import { User } from "../../../app/lib/dbTypes";
 import { hashPassword } from "../../../app/lib/hash";
 
 export async function POST(request : NextRequest){
   try {
-    const musicDb = new MusicDb();
-    await musicDb.connect(); 
     const newUserInfo = await request.json();
     const hashedPassword = await hashPassword(newUserInfo.hashedPassword);
     const creationDate = newUserInfo.date.split("T");

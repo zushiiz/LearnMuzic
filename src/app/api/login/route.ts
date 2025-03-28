@@ -1,12 +1,11 @@
 import {NextRequest, NextResponse} from "next/server";
-import { MusicDb } from "../../../app/lib/db";
+import { musicDb } from "../../../app/lib/db";
 import { errors } from "../../../app/lib/Errors";
 import { comparePassword } from "../../../app/lib/hash";
 
 export async function POST(request : NextRequest){
   try {
-    const musicDb = new MusicDb();
-    await musicDb.connect(); 
+     
     const loginInfo = await request.json();
     const storedPass = await musicDb.getUserPasswordByName(loginInfo.username);
     const success = await comparePassword(loginInfo.password, storedPass);

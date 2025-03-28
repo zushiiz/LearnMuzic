@@ -1,11 +1,9 @@
 import {NextRequest, NextResponse} from "next/server";
-import { MusicDb } from "../../../app/lib/db";
+import { musicDb } from "../../../app/lib/db";
 import { User } from "../../../app/lib/dbTypes";
 
 export async function GET(req : NextRequest){
   try {
-    const musicDb = new MusicDb();
-    await musicDb.connect();
     console.log(req.cookies.get("userId"));
 
     if (!req.cookies.get("userId")){
@@ -30,8 +28,5 @@ export async function GET(req : NextRequest){
   } catch (error) {
     console.error(error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
-  } finally {
-    // Optionally disconnect from the DB
-    // await musicDb.disconnect();
   }
 }
