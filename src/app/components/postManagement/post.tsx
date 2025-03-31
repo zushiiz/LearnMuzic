@@ -1,5 +1,5 @@
 "use client";
-
+import Card from "../postManagement/postPreview";
 import {useEffect, useState} from "react";
 import { TutorialPost } from "../../lib/dbTypes";
 

@@ -1,8 +1,10 @@
+interface CardProps(){
+  
+}
 
-
-export default function postCard(){
+export default function Card(){
   return (
-  <div>
+  <div className="border">
 
   </div>
   );
