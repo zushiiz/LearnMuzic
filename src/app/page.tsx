@@ -1,11 +1,12 @@
 import VideoPlayer from "./components/videoEmbedPlayer";
-import Post from "./components/post";
+
+import Logout from "./components/userManagement/logout";
 
 export default function Home() {
   return (
     <div>
       
-      <Post/>
+      <Logout/>
 
       <div>hello</div>
     </div>

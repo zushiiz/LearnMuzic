@@ -1,8 +1,7 @@
 "use client";
 
 import {useEffect, useState} from "react";
-import { TutorialPost } from "../lib/dbTypes";
-import Logout from "./userManagement/logout";
+import { TutorialPost } from "../../lib/dbTypes";
 
 export default function Post(){
 
@@ -37,7 +36,6 @@ export default function Post(){
           </li>
         ))}
 
-        <Logout/>
       </ul>
     </div>
   );
