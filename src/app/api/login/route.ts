@@ -1,10 +1,15 @@
 import {NextRequest, NextResponse} from "next/server";
 import { musicDb } from "../../../app/lib/db";
 import { httpErrors } from "../../../app/lib/httpErrors";
+import { checkUserCookie } from "../../lib/cookie";
 import { comparePassword } from "../../../app/lib/hash";
 
 export async function POST(req : NextRequest){
   try {
+    const cookie = await checkUserCookie();
+    if(cookie) {
+      return httpErrors.conflict;
+    }
      
     const loginInfo = await req.json();
     const storedPass = await musicDb.getUserPasswordByName(loginInfo.username);

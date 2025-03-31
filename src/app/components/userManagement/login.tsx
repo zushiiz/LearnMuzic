@@ -1,19 +1,19 @@
 "use client";
 import RegisterField from "./registerFields";
 import Button from "../button";
-import { errors } from "../../lib/Errors";
 import { useRouter } from "next/navigation";
+import { httpErrors } from "../../lib/httpErrors";
 
 
 export default function loginInputs(){
   const router = useRouter();
 
-  async function getLoginInputs(){
+  async function getLoginInputs(){ // Don't like this but...
     const nameInput = document.getElementById("usernameField") as HTMLInputElement;
     const passwordInput = document.getElementById("passwordField") as HTMLInputElement;
   
     if (!nameInput || !passwordInput){
-      throw new Error(errors.input_nan);
+      return httpErrors.badRequest;
     }
     const userLogin  = {
       username : nameInput.value,
