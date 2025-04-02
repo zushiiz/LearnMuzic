@@ -37,6 +37,16 @@ export interface Song {
   releaseYear : number
 }
 
+export interface TutorialCardInformation {
+  songTitle : string,
+  imagePath : string,
+  songArtist : string,
+  releaseYear : number,
+  videoAuthor : string,
+  instrument : string,
+  difficulty : string,
+}
+
 export interface User {
   id : number,
   username : string,
