@@ -29,14 +29,7 @@ export default function Post(){
 
   return(
     <div>
-      <ul>
-        {tutorialPosts.map((post) => (
-          <li key={post.tutorialPostId}>
-            Song ID: {post.songId}, Tutorial ID: {post.tutorialId}
-          </li>
-        ))}
-
-      </ul>
+ 
     </div>
   );
 

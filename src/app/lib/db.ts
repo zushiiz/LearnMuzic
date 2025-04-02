@@ -1,5 +1,5 @@
 import mysql from "mysql2/promise";
-import { TutorialPost, Tutorial, BaseEntity, Instrument, Difficulty, Song, Genre, User, Artist} from "./dbTypes";
+import { TutorialPost, Tutorial, BaseEntity, Instrument, Difficulty, Song, Genre, User, Artist, TutorialCardInformation} from "./dbTypes";
 import { errors } from "./Errors";
 
 // Class för att kunna skapa en connection till mysql sidan
@@ -101,35 +101,42 @@ export class MusicDb extends Db{
     }
   } 
 
-  // public async SongId(id : number): Promise<Song[]>{
-  //   try {
-  //     if (!this.dbConnection){
-  //       throw new Error(errors.not_connected);
-  //     }
-  //     const [rows] = await this.dbConnection.execute<mysql.RowDataPacket[]>
-  //     (`
-  //       SELECT * 
-  //       FROM song
-  //       WHERE songId = ${id}
-  //     `);
-  //     if (!rows || rows.length === 0) {
-  //       throw new Error(errors.result_null);
-  //     }
+  public async getSongById(id : number): Promise<Song[]>{
+    try {
+      if (!this.dbConnection){
+        throw new Error(errors.not_connected);
+      }
+      const [rows] = await this.dbConnection.execute<mysql.RowDataPacket[]>
+      (`
+        SELECT * 
+        FROM song
+        WHERE songId = ?
+      `, [id]);
+      if (!rows || rows.length === 0) {
+        throw new Error(errors.result_empty);
+      }
 
-  //     const songs = await Promise.all(
-  //       rows.map(async (row : any) => {
-  //         const genre = await this.getEntityById<Genre>("genre", row.genreId);
-  //         return {
-  //           id : row.songId,
-  //           coverPath : row.coverImgPath,
-  //           title : row.songTitle,
-            
-  //         }
-  //       })
-
-  //     )
-  //   }
-  // }
+      const songs = await Promise.all(
+        rows.map(async (row : any) => {
+          const genre = await this.getEntityById<Genre>("genre", row.genreId);
+          if (!genre){
+            throw new Error(errors.result_empty);
+          }
+          return {
+            id : row.songId,
+            imagePath : row.coverImgPath,
+            title : row.songTitle,
+            artistId : row.artistId,
+            genre : genre.genre,
+            releaseYear : row.releaseYear
+          }
+        })
+      );
+      return songs;
+    } catch (err){
+      throw new Error(errors.result_empty);
+    }
+  }
 
   public async getAllTutorialPosts(): Promise<TutorialPost[]>{
     try {
@@ -146,7 +153,29 @@ export class MusicDb extends Db{
         songId : row.songId,
         tutorialId : row.tutorialId,
       }));
+      
     } catch (err) {
+      console.log(err);
+      throw new Error(errors.result_empty);
+    }
+  }
+
+  public async getAllTutorialInformationByIds(ids : TutorialPost[]): Promise<TutorialCardInformation[]>{
+    try{
+      if (!this.dbConnection){
+        throw new Error(errors.not_connected);
+      }
+
+      for (let i = 0; i < ids.length; i++){
+        const tutorialInfo = await musicDb.getTutorialById(ids[i].tutorialId);
+        const songInfo = await musicDb.getSongById(ids[i].songId);
+
+        console.log(tutorialInfo[0]);
+        console.log(songInfo[0]);
+
+      }
+
+    } catch(err){
       throw new Error(errors.result_empty);
     }
   }
