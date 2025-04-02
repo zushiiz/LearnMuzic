@@ -32,7 +32,8 @@ export interface Song {
   id : number,
   imagePath : string,
   title : string,
-  genreId : number,
+  artistId : number,
+  genre : string,
   releaseYear : number
 }
 
