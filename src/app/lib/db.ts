@@ -202,7 +202,7 @@ export class MusicDb extends Db{
         `
         SELECT *
         FROM tutorialPost
-        WHERE id = ?;
+        WHERE tutorialPostId = ?;
         `
       , [id]);
 
@@ -211,7 +211,7 @@ export class MusicDb extends Db{
         songId : row.songId,
         tutorialId : row.tutorialId
       }));
-
+      
       return tutorial[0];
 
     } catch (err){
