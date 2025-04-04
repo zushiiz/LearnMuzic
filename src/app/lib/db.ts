@@ -62,7 +62,7 @@ export class MusicDb extends Db{
   }
 
   //Tutorial
-  public async getTutorialById(id : number): Promise<Tutorial[]>{
+  public async getTutorialById(id : number): Promise<Tutorial>{
     try {
       if (!this.dbConnection){
         throw new Error(errors.not_connected);
@@ -94,14 +94,14 @@ export class MusicDb extends Db{
 
         })
       );
-      return tutorials;
+      return tutorials[0];
     } catch (err) {
       console.log(err);
       throw new Error(errors.result_empty);
     }
   } 
 
-  public async getSongById(id : number): Promise<Song[]>{
+  public async getSongById(id : number): Promise<Song>{
     try {
       if (!this.dbConnection){
         throw new Error(errors.not_connected);
@@ -132,7 +132,7 @@ export class MusicDb extends Db{
           }
         })
       );
-      return songs;
+      return songs[0];
     } catch (err){
       throw new Error(errors.result_empty);
     }
@@ -172,18 +172,15 @@ export class MusicDb extends Db{
         const tutorialInfo = await musicDb.getTutorialById(ids[i].tutorialId);
         const songInfo = await musicDb.getSongById(ids[i].songId);
 
-        console.log(tutorialInfo[0]);
-        console.log(songInfo[0]);
-
         const post = {
           id : ids[i].tutorialPostId,
-          songTitle : songInfo[0].title,
-          imagePath : songInfo[0].imagePath,
+          songTitle : songInfo.title,
+          imagePath : songInfo.imagePath,
           songArtist : "a",
-          releaseYear : songInfo[0].releaseYear,
-          videoAuthor : tutorialInfo[0].author,
-          instrument : tutorialInfo[0].instrument,
-          difficulty : tutorialInfo[0].difficulty
+          releaseYear : songInfo.releaseYear,
+          videoAuthor : tutorialInfo.author,
+          instrument : tutorialInfo.instrument,
+          difficulty : tutorialInfo.difficulty
         }
 
         newList.push(post);
