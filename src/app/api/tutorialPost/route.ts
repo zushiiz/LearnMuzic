@@ -5,21 +5,13 @@ import { httpErrors } from "../../lib/httpErrors";
 export async function GET(){
   try {
 
+    console.log("get rn");
     const informationIds = await musicDb.getAllTutorialPosts();
-
-    // async function information(){
-    //   for (let i = 0; i < informationIds.length; i++){
-    //     const tutorialInfo = await musicDb.getTutorialById(informationIds[i].tutorialId);
-    //     const songInfo = await musicDb.getSongById(informationIds[i].songId);
-
-    //     console.log(tutorialInfo[0]);
-    //     console.log(songInfo[0]);
-    //  }
-    // }
-    // await information();
-
-    // Send the data as a JSON response
-    return NextResponse.json(informationIds, {status : 200});
+    console.log("ids", informationIds);
+    const allTutorialPosts = await musicDb.getAllTutorialInformationByIds(informationIds);
+    console.log("allTutorials", allTutorialPosts);
+    
+    return NextResponse.json(allTutorialPosts, {status : 200});
 
   } catch (err) {
     console.error(err);
