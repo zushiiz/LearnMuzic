@@ -12,9 +12,9 @@ export default function Post(){
   useEffect(() => { // Makes sure this runs before UI loades to prevent asynchronized loading
     const fetchTutorialPosts = async () => {
       try {
-        const response = await fetch('/api/tutorialPost');
+        const response = await fetch("/api/tutorialPost");
         if (!response.ok) {
-          throw new Error('Failed to fetch tutorial posts');
+          throw new Error("Failed to fetch tutorial posts");
         }
         const data : TutorialCardInformation[] = await response.json();
         setTutorialPosts(data);
@@ -31,7 +31,9 @@ export default function Post(){
     <div>
 
       {tutorialPosts.map((info) => (
-        <Card songTitle={info.songTitle} 
+        <Card 
+        id={info.id}
+        songTitle={info.songTitle} 
         imagePath={info.imagePath} 
         songArtist={info.songArtist} 
         releaseYear={info.releaseYear} 
