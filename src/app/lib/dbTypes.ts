@@ -38,6 +38,7 @@ export interface Song {
 }
 
 export interface TutorialCardInformation {
+  id : number,
   songTitle : string,
   imagePath : string,
   songArtist : string,
