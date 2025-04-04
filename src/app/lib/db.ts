@@ -165,6 +165,8 @@ export class MusicDb extends Db{
       if (!this.dbConnection){
         throw new Error(errors.not_connected);
       }
+      
+      const newList = [];
 
       for (let i = 0; i < ids.length; i++){
         const tutorialInfo = await musicDb.getTutorialById(ids[i].tutorialId);
@@ -173,7 +175,20 @@ export class MusicDb extends Db{
         console.log(tutorialInfo[0]);
         console.log(songInfo[0]);
 
+        const post = {
+          songTitle : songInfo[0].title,
+          imagePath : songInfo[0].imagePath,
+          songArtist : "a",
+          releaseYear : songInfo[0].releaseYear,
+          videoAuthor : tutorialInfo[0].author,
+          instrument : tutorialInfo[0].instrument,
+          difficulty : tutorialInfo[0].difficulty
+        }
+
+        newList.push(post);
       }
+
+      return newList;
 
     } catch(err){
       throw new Error(errors.result_empty);
