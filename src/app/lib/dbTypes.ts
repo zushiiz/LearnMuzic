@@ -44,7 +44,7 @@ export interface TutorialCardInformation {
   releaseYear : number,
   videoAuthor : string,
   instrument : string,
-  difficulty : string,
+  difficulty : string | null,
 }
 
 export interface User {
