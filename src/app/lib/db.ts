@@ -176,6 +176,7 @@ export class MusicDb extends Db{
         console.log(songInfo[0]);
 
         const post = {
+          id : ids[i].tutorialPostId,
           songTitle : songInfo[0].title,
           imagePath : songInfo[0].imagePath,
           songArtist : "a",
