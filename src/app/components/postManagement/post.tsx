@@ -32,6 +32,7 @@ export default function Post(){
 
       {tutorialPosts.map((info) => (
         <Card 
+        key={info.id}
         id={info.id}
         songTitle={info.songTitle} 
         imagePath={info.imagePath} 
