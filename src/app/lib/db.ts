@@ -196,6 +196,32 @@ export class MusicDb extends Db{
     }
   }
 
+  public async getTutorialPostIdsById(id : number): Promise<TutorialPost>{
+    try {
+      if (!this.dbConnection){
+        throw new Error(errors.not_connected);
+      }
+      const [rows] = await this.dbConnection.execute<mysql.RowDataPacket[]>(
+        `
+        SELECT *
+        FROM tutorialPost
+        WHERE id = ?;
+        `
+      , [id]);
+
+      const tutorial = rows.map((row : any) => ({
+        tutorialPostId : row.tutorialPostId,
+        songId : row.songId,
+        tutorialId : row.tutorialId
+      }));
+
+      return tutorial[0];
+
+    } catch (err){
+      throw new Error(errors.result_empty);
+    }
+  }
+
   // User
   public async getUserInformationById(id : number): Promise<User[]>{
     try {
