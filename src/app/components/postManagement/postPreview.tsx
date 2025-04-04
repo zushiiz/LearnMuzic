@@ -1,14 +1,6 @@
-interface CardProps{
-  songTitle : string,
-  imagePath : string,
-  songArtist : string,
-  releaseYear : number,
-  videoAuthor : string,
-  instrument : string,
-  difficulty : string,
-}
+import { Tutorial, TutorialCardInformation } from "../../lib/dbTypes"
 
-export default function Card({ songTitle, imagePath, songArtist, releaseYear, videoAuthor, instrument, difficulty } : CardProps){
+export default function Card({ songTitle, imagePath, songArtist, releaseYear, videoAuthor, instrument, difficulty } : TutorialCardInformation){
   return (
   <ul className="border">
     <li>{songTitle}</li>
