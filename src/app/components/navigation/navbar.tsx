@@ -23,8 +23,6 @@ export default function Navbar(){
       }
     }
     fetchUserInfo();
-    console.log("navbar useeffect");
-
 
   }, []);
 
