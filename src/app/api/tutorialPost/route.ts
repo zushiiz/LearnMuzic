@@ -10,8 +10,6 @@ export async function GET(){
     return NextResponse.json(allTutorialPosts, {status : 200});
 
   } catch (err) {
-    console.error(err);
-    console.log(err);
     return httpErrors.internalServerError;
   }
 }
