@@ -220,7 +220,7 @@ export class MusicDb extends Db{
   }
 
   // User
-  public async getUserInformationById(id : number): Promise<User[]>{
+  public async getUserInformationById(id : number): Promise<User>{
     try {
       if (!this.dbConnection) {
         throw new Error(errors.not_connected);
@@ -232,19 +232,22 @@ export class MusicDb extends Db{
       WHERE userId = ?;
       `, [id]);
 
-      return rows.map((row : any) => ({
+      const user = rows.map((row : any) => ({
         id : row.userId,
         username : row.username,
         hashedPassword : row.password,
         mail : row.email,
         creationDate : row.creationDate
       }));
+
+      return user[0];
+
     } catch (err) {
       throw new Error(errors.result_empty);
     }
   }
 
-  public async getUserInformationByName(username : string): Promise<User[]>{
+  public async getUserInformationByName(username : string): Promise<User>{
     try {
       if (!this.dbConnection) {
         throw new Error(errors.not_connected);
@@ -258,13 +261,14 @@ export class MusicDb extends Db{
       WHERE username = ?;
       `, [username]);
 
-      return rows.map((row : any) => ({
+      const user = rows.map((row : any) => ({
         id : row.userId,
         username : row.username,
         hashedPassword : row.password,
         mail : row.email,
         creationDate : row.creationDate
       }));
+      return user[0];
     } catch (err) {
       throw new Error(errors.result_empty);
     }
@@ -292,7 +296,7 @@ export class MusicDb extends Db{
     }
   }
 
-  public async getVerifiedArtist(userId : number): Promise<Artist[] | Boolean>{
+  public async getVerifiedArtistById(userId : number): Promise<Artist | Boolean>{
     try {
       if (!this.dbConnection) {
         throw new Error(errors.not_connected);
@@ -303,10 +307,11 @@ export class MusicDb extends Db{
         FROM verifiedArtist
         WHERE artistId = ?;
       `, [userId])
-      return rows.map((row : any) => ({
+      const artist = rows.map((row : any) => ({
         id : row.artistId,
         name : row.artistName
       }));
+      return artist[0];
     } catch (err) {
       console.log("User is not verified artist");
       return false;
