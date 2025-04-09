@@ -60,3 +60,7 @@ export interface Artist {
   id : number,
   name : string
 }
+
+export interface Profile {
+  username : string
+}
