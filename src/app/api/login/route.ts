@@ -19,7 +19,7 @@ export async function POST(req : NextRequest){
 
       const res = NextResponse.json({message : "Login successful"}, {status : 200});
 
-      res.cookies.set("userId", userId[0].id.toString(), {
+      res.cookies.set("userId", userId.id.toString(), {
         httpOnly : true, //prevents javascript from accessing cookie. ex. document.cookie
         secure : false, //process.env.NODE_ENV === "production", //ensures cookie sent over http connecitons, only in production (search it up more)
         maxAge : 60 * 60 * 24, // cookie age

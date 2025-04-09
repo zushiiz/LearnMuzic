@@ -19,7 +19,7 @@ export async function GET(req : NextRequest){
 
     const userInformation = await musicDb.getUserInformationById(userId);
     
-    return NextResponse.json(userInformation[0], {status : 200});
+    return NextResponse.json(userInformation, {status : 200});
     
   } catch (err) {
     return httpErrors.internalServerError;
