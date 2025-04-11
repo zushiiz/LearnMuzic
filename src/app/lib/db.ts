@@ -356,6 +356,39 @@ export class MusicDb extends Db{
   //   }
   // }
 
+  public async addSongToUserSongList(postId : number, userId : number) {
+    try {
+      if (!this.dbConnection){
+        throw new Error(errors.not_connected);
+      }
+
+      await this.dbConnection.execute(`
+      INSERT INTO userSongList (tutorialPostId, userId)
+      VALUES (?, ?);
+      `, [postId, userId]);
+
+    } catch (err) {
+      console.error(err);
+      throw new Error(errors.result_empty);
+    }
+  }
+
+  public async removeSongFromUserSongList(postId : number, userId : number) {
+    try {
+      if (!this.dbConnection){
+        throw new Error(errors.not_connected);
+      }
+
+      await this.dbConnection.execute(`
+      DELETE FROM userSongList
+      WHERE tutorialPostId = ? AND userId = ?;
+      `, [postId, userId]);
+
+    } catch (err) {
+      console.error(err);
+      throw new Error(errors.result_empty);
+    }
+  }
 }
 
 
