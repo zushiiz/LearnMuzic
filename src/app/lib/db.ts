@@ -37,13 +37,12 @@ export class MusicDb extends Db{
     super();
   }
 
-  public async getEntityById<T extends BaseEntity>(tableName : String, id : number): Promise<T | null>{
-
+  public async getEntityById<T extends BaseEntity>(tableName : String, id : number): Promise<T | null>{ // INJECTION RISK!!!
     try {
       if (!this.dbConnection) {
         throw new Error(errors.result_empty);
       }
-      const [rows] = await this.dbConnection.execute<mysql.RowDataPacket[]>
+      const [rows] = await this.dbConnection.execute<mysql.RowDataPacket[]> 
       (`
       SELECT *
       FROM ${tableName}
@@ -56,6 +55,7 @@ export class MusicDb extends Db{
 
       return rows[0] as T;
     } catch (err) {
+      console.error(err);
       throw new Error(errors.result_empty);
     }
 
@@ -80,13 +80,13 @@ export class MusicDb extends Db{
       const tutorials = await Promise.all(
         rows.map(async (row : any) => {
           const instrument = await this.getEntityById<Instrument>("instrument", row.instrumentId);
-          const difficulty = await this.getEntityById<Difficulty>("difficulty", row.difficultyId);
+          const difficulty = await this.getEntityById<Difficulty>("difficulty", row.difficulty);
           if (!instrument){
             throw new Error(errors.result_empty);
           }
           return {
             id : row.tutorialId,
-            videoEmbed : row.embedVideoLink,
+            videoEmbed : row.embedVideoId,
             author : row.videoAuthor,
             instrument : instrument.instrument, 
             difficulty : difficulty != null ? difficulty.difficulty : null
@@ -326,7 +326,7 @@ export class MusicDb extends Db{
 
       await this.dbConnection.execute
       (`
-      INSERT INTO user (username, password, email, creationDate)
+      INSERT INTO user (username, password, mail, creationDate)
       VALUES (?, ?, ?, ?);
       `, [userInfo.username, userInfo.hashedPassword, userInfo.mail, userInfo.creationDate]);
 
@@ -334,6 +334,27 @@ export class MusicDb extends Db{
     throw new Error(errors.input_nan);
     }
   } 
+
+  // Profile
+
+  // public async getUserSongListById(id : number): Promise<[]> {
+  //   try {
+
+  //     if(!this.dbConnection){
+  //       throw new Error(errors.not_connected);
+  //     }
+      
+  //     const [rows] = await this.dbConnection.execute<mysql.RowDataPacket[]>
+  //     (`
+  //     SELECT *
+  //     FROM userSongList
+  //     WHERE 
+  //     `);
+
+  //   } catch (err){
+  //     throw new Error(errors.result_empty);
+  //   }
+  // }
 
 }
 
