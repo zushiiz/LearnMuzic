@@ -12,8 +12,8 @@ interface TutorialPageProps {
   }>
 }
 
-function getId(id : string){
-  fetch("/api/addToSongList",
+function getId(id : string, apiRoute : string){
+  fetch(`/api/${apiRoute}`,
   {method : "POST",
   headers : {
       "Accept" : "application/json",
@@ -80,9 +80,16 @@ export default function TutorialPage( {params} : TutorialPageProps ){
     
     <Button buttonFunc={() => {
       if (postId) {
-        getId(postId);
+        getId(postId, "addToSongList");
       }
     }} buttonText="Add"/>
+
+    <Button buttonFunc={() => {
+      if (postId) {
+        getId(postId, "removeFromSongList");
+      }
+    }} buttonText="Remove"/>
+
     </section>
   );
 
