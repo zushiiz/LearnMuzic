@@ -166,7 +166,7 @@ export class MusicDb extends Db{
         throw new Error(errors.not_connected);
       }
       
-      const newList = [];
+      const tutorialList = [];
 
       for (let i = 0; i < ids.length; i++){
         const tutorialInfo = await musicDb.getTutorialById(ids[i].tutorialId);
@@ -183,10 +183,10 @@ export class MusicDb extends Db{
           difficulty : tutorialInfo.difficulty
         }
 
-        newList.push(post);
+        tutorialList.push(post);
       }
 
-      return newList;
+      return tutorialList;
 
     } catch(err){
       throw new Error(errors.result_empty);
@@ -337,24 +337,28 @@ export class MusicDb extends Db{
 
   // Profile
 
-  // public async getUserSongListById(id : number): Promise<[]> {
-  //   try {
+  public async getUserSongListById(id : number): Promise<TutorialCardInformation[]> {
+    try {
 
-  //     if(!this.dbConnection){
-  //       throw new Error(errors.not_connected);
-  //     }
-      
-  //     const [rows] = await this.dbConnection.execute<mysql.RowDataPacket[]>
-  //     (`
-  //     SELECT *
-  //     FROM userSongList
-  //     WHERE 
-  //     `);
+      if(!this.dbConnection){
+        throw new Error(errors.not_connected);
+      }
+      const tutorialList = [];      
+      const [rows] = await this.dbConnection.execute<mysql.RowDataPacket[]>
+      (`
+      SELECT *
+      FROM userSongList
+      WHERE 
+      `);
+      for (let i = 0; i < rows.length; i++){
+        console.log(rows[i]);
+      }
+      return [];
 
-  //   } catch (err){
-  //     throw new Error(errors.result_empty);
-  //   }
-  // }
+    } catch (err){
+      throw new Error(errors.result_empty);
+    }
+  }
 
   public async addSongToUserSongList(postId : number, userId : number) {
     try {
