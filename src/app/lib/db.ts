@@ -343,20 +343,34 @@ export class MusicDb extends Db{
       if(!this.dbConnection){
         throw new Error(errors.not_connected);
       }
-      const tutorialList = [];      
+      const songList = [];     
+      console.log("id", id); 
       const [rows] = await this.dbConnection.execute<mysql.RowDataPacket[]>
-      (`
-      SELECT *
-      FROM userSongList
-      WHERE 
-      `);
+      ("SELECT * FROM userSongList WHERE userId = ?", [id]);
+      console.log("row length" ,rows.length);
       for (let i = 0; i < rows.length; i++){
         console.log(rows[i]);
+        const tutorialInfo = await musicDb.getTutorialById(rows[i].tutorialId);
+        const songInfo = await musicDb.getSongById(rows[i].songId);
+
+        const post = {
+          id : rows[i].tutorialPostId,
+          songTitle : songInfo.title,
+          imagePath : songInfo.imagePath,
+          songArtist : "a",
+          releaseYear : songInfo.releaseYear,
+          videoAuthor : tutorialInfo.author,
+          instrument : tutorialInfo.instrument,
+          difficulty : tutorialInfo.difficulty
+        }
+
+        songList.push(post);
       }
-      return [];
+      return songList;
 
     } catch (err){
-      throw new Error(errors.result_empty);
+      console.error(err);
+      return [];
     }
   }
 
