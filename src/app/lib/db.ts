@@ -68,11 +68,7 @@ export class MusicDb extends Db{
         throw new Error(errors.not_connected);
       }
       const [rows] = await this.dbConnection.execute<mysql.RowDataPacket[]>
-      (`
-      SELECT * 
-      FROM tutorial 
-      WHERE tutorialId = ?;
-      `, [id]);
+      ("SELECT * FROM tutorial WHERE tutorialId = ?;", [id]);
       if (!rows || rows.length === 0) {
         throw new Error(errors.result_empty)
       }
@@ -96,7 +92,6 @@ export class MusicDb extends Db{
       );
       return tutorials[0];
     } catch (err) {
-      console.log(err);
       throw new Error(errors.result_empty);
     }
   } 
@@ -155,7 +150,6 @@ export class MusicDb extends Db{
       }));
       
     } catch (err) {
-      console.log(err);
       throw new Error(errors.result_empty);
     }
   }
@@ -169,8 +163,8 @@ export class MusicDb extends Db{
       const tutorialList = [];
 
       for (let i = 0; i < ids.length; i++){
-        const tutorialInfo = await musicDb.getTutorialById(ids[i].tutorialId);
-        const songInfo = await musicDb.getSongById(ids[i].songId);
+        const tutorialInfo = await this.getTutorialById(ids[i].tutorialId);
+        const songInfo = await this.getSongById(ids[i].songId);
 
         const post = {
           id : ids[i].tutorialPostId,
@@ -253,7 +247,6 @@ export class MusicDb extends Db{
         throw new Error(errors.not_connected);
       }
 
-      console.log(username);
       const [rows] = await this.dbConnection.execute<mysql.RowDataPacket[]>
       (`
       SELECT *
@@ -344,14 +337,12 @@ export class MusicDb extends Db{
         throw new Error(errors.not_connected);
       }
       const songList = [];     
-      console.log("id", id); 
       const [rows] = await this.dbConnection.execute<mysql.RowDataPacket[]>
       ("SELECT * FROM userSongList WHERE userId = ?", [id]);
-      console.log("row length" ,rows.length);
       for (let i = 0; i < rows.length; i++){
-        console.log(rows[i]);
-        const tutorialInfo = await musicDb.getTutorialById(rows[i].tutorialId);
-        const songInfo = await musicDb.getSongById(rows[i].songId);
+        const tutorialPostIds = await this.getTutorialPostIdsById(rows[i].tutorialPostId);
+        const tutorialInfo = await this.getTutorialById(tutorialPostIds.tutorialId);
+        const songInfo = await this.getSongById(tutorialPostIds.songId);
 
         const post = {
           id : rows[i].tutorialPostId,
