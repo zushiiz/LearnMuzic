@@ -213,6 +213,32 @@ export class MusicDb extends Db{
     }
   }
 
+  public async getTutorialPostsByGenre(id : number): Promise<TutorialPost[]>{
+    try {
+      if (!this.dbConnection) {
+        throw new Error(errors.not_connected);
+      }
+
+      const [rows] = await this.dbConnection.execute<mysql.RowDataPacket[]>
+      (`
+      SELECT * FROM tutorialPost WHERE genreId = ?;
+      `, [id]);
+      if (!rows || rows.length === 0) {
+        throw new Error(errors.result_empty);
+      }
+
+      return rows.map((row : any) => ({
+        tutorialPostId : row.tutorialPostId,
+        songId : row.songId,
+        tutorialId : row.tutorialId,
+      }));
+
+    } catch (err) {
+      console.error(err);
+      throw new Error(errors.result_empty);
+    }
+  }
+
   // User
   public async getUserInformationById(id : number): Promise<User>{
     try {
@@ -360,7 +386,6 @@ export class MusicDb extends Db{
       return songList;
 
     } catch (err){
-      console.error(err);
       return [];
     }
   }
@@ -377,7 +402,6 @@ export class MusicDb extends Db{
       `, [postId, userId]);
 
     } catch (err) {
-      console.error(err);
       throw new Error(errors.result_empty);
     }
   }
@@ -394,7 +418,6 @@ export class MusicDb extends Db{
       `, [postId, userId]);
 
     } catch (err) {
-      console.error(err);
       throw new Error(errors.result_empty);
     }
   }
