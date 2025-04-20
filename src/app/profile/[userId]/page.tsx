@@ -21,7 +21,7 @@ export default function ProfilePage( {params} : ProfilePageProps ){
       try {
         const userId = (await params).userId;
         const response = await fetch(`/api/userProfile?userId=${userId}`);
-        const songList = await fetch(`/api/userSongList?profileId=${userId}`);
+        const songList = await fetch(`/api/songList/userSongList?profileId=${userId}`);
         const data = await response.json();
         const songListData = await songList.json();
         console.log("song list", songListData);

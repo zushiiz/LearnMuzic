@@ -13,7 +13,7 @@ interface TutorialPageProps {
 }
 
 function getId(id : string, apiRoute : string){
-  fetch(`/api/${apiRoute}`,
+  fetch(`/api/songList/${apiRoute}`,
   {method : "POST",
   headers : {
       "Accept" : "application/json",
