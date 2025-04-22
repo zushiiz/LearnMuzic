@@ -219,19 +219,30 @@ export class MusicDb extends Db{
         throw new Error(errors.not_connected);
       }
 
-      const [rows] = await this.dbConnection.execute<mysql.RowDataPacket[]>
+      const [filteredSongRows] = await this.dbConnection.execute<mysql.RowDataPacket[]>
       (`
-      SELECT * FROM tutorialPost WHERE genreId = ?;
+      SELECT songId FROM song WHERE genreId = ?;
       `, [id]);
-      if (!rows || rows.length === 0) {
+      if (!filteredSongRows || filteredSongRows.length === 0) {
         throw new Error(errors.result_empty);
       }
 
-      return rows.map((row : any) => ({
-        tutorialPostId : row.tutorialPostId,
-        songId : row.songId,
-        tutorialId : row.tutorialId,
-      }));
+      const filteredSongList = [];
+      for (let i = 0; i < filteredSongRows.length; i++){
+        const [song] = await this.dbConnection.execute<mysql.RowDataPacket[]>
+        (`
+        SELECT * FROM tutorialPost WHERE songId = ?
+        `, [filteredSongRows[i].songId]);
+
+        const filteredSong : TutorialPost = {
+          tutorialPostId : song[0].tutorialPostId,
+          songId : song[0].tutorialPostId,
+          tutorialId : song[0].tutorialPostId
+        }
+        filteredSongList.push(filteredSong);
+      }
+
+      return filteredSongList;
 
     } catch (err) {
       console.error(err);
