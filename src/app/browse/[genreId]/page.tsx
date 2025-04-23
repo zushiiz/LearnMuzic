@@ -32,7 +32,18 @@ export default function filteredPosts( {params} : FilteredPostsProps ){
   return (
 
     <div>
-      
+      {tutorialPosts.map((info) => (
+        <Card 
+        key={info.id}
+        id={info.id}
+        songTitle={info.songTitle} 
+        imagePath={info.imagePath} 
+        songArtist={info.songArtist} 
+        releaseYear={info.releaseYear} 
+        videoAuthor={info.videoAuthor} 
+        instrument={info.instrument} 
+        difficulty={info.difficulty}/>
+      ))}
     </div>
 
   );
