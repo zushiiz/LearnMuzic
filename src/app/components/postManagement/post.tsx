@@ -2,24 +2,21 @@
 import Card from "../postManagement/postPreview";
 import {useEffect, useState} from "react";
 import { TutorialCardInformation } from "../../lib/dbTypes";
+import { httpErrors } from "../../lib/httpErrors";
 
 export default function Post(){
 
   const [tutorialPosts, setTutorialPosts] = useState<TutorialCardInformation[]>([]); //Holds the fetched data, it is set to a array holding TutoriaPost Interface
-  const [loading, setLoading] = useState<boolean>(true); // Keeps track when data is loaded or not
-  const [error, setError] = useState<string | null>(null); // Holds error message incase fetch fails
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => { // Makes sure this runs before UI loades to prevent asynchronized loading
     const fetchTutorialPosts = async () => {
       try {
         const response = await fetch("/api/tutorialPost");
-        if (!response.ok) {
-          throw new Error("Failed to fetch tutorial posts");
-        }
         const data : TutorialCardInformation[] = await response.json();
         setTutorialPosts(data);
-      } catch (err : any) {
-        setError(err.message);
+      } catch (err) {
+        return httpErrors.badRequest;
       } finally {
         setLoading(false);
       }
